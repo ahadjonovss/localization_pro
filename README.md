@@ -1,5 +1,5 @@
 
-![Logo](https://firebasestorage.googleapis.com/v0/b/shaxobcha-1ac32.appspot.com/o/2024-05-19%2015.12.07.jpg?alt=media&token=9fd4348b-3c63-4b97-b0fe-9ccc3fe98aa3)
+![Logo](https://firebasestorage.googleapis.com/v0/b/shaxobcha-1ac32.appspot.com/o/2024-05-19%2017.30.43.jpg?alt=media&token=f6b663d2-e326-4bdf-828f-4850659df78d)
 
 # Localization Pro
 
