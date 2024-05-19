@@ -2,6 +2,7 @@ name: localization_pro
 description: "A dynamic Flutter package for seamless localization management."
 version: 0.0.1
 homepage:
+repository: https://github.com/ahadjonovss/localization_pro
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
