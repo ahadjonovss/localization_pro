@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:localization_pro/src/provider/provider.dart';
 
-/// Extends the [String] class to provide an easy and convenient way to
-/// translate text directly from string literals or variables.
+/// Extension on String to provide easy access to translation methods.
 ///
-/// By calling the `tr()` method on any string, the text is automatically
-/// localized using the translations available in the nearest [LocalizationProvider]
-/// up the widget tree.
+/// This extension adds two methods, `tr` and `trParams`, to the String class,
+/// allowing you to easily translate strings using the `LocalizationManager` provided by the `LocalizationProvider`.
 extension LocalizedStringExt on String {
-  /// Translates the string based on the current locale's translations.
+  /// Translates the string key using the `LocalizationManager` from the provided context.
   ///
-  /// This method looks up the nearest [LocalizationProvider] from the provided [context],
-  /// and attempts to translate the current string. If no translation is found, the original
-  /// string is returned as a fallback.
+  /// This method uses the `LocalizationManager` from the nearest `LocalizationProvider`
+  /// in the widget tree to translate the string key. If the key is not found, the default
+  /// not found text is returned.
   ///
-  /// Example usage:
-  /// ```dart
-  /// 'hello'.tr(context)
-  /// ```
+  /// - Parameters:
+  ///   - context: The `BuildContext` used to find the `LocalizationProvider` and `LocalizationManager`.
   ///
-  /// [context] The build context from which to find the [LocalizationProvider].
-  /// Returns the translated string if a match is found, or the original string if not.
+  /// - Returns: The translated string, or the default not found text if the key is not found.
   String tr(BuildContext context) {
     return LocalizationProvider.of(context).translate(this);
+  }
+
+  /// Translates the string key with parameters using the `LocalizationManager` from the provided context.
+  ///
+  /// This method uses the `LocalizationManager` from the nearest `LocalizationProvider`
+  /// in the widget tree to translate the string key with the given parameters. Placeholders in the
+  /// translation string are replaced with the values from the `params` map. If the key is not found,
+  /// the default not found text is returned.
+  ///
+  /// - Parameters:
+  ///   - context: The `BuildContext` used to find the `LocalizationProvider` and `LocalizationManager`.
+  ///   - params: A map of parameters to replace placeholders in the translation string.
+  ///
+  /// - Returns: The translated string with parameters, or the default not found text if the key is not found.
+  String trParams(BuildContext context, Map<String, dynamic> params) {
+    return LocalizationProvider.of(context).translateWithParams(this, params);
   }
 }

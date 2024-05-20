@@ -1,44 +1,60 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localization_pro/src/helpers/helpers.dart';
+import 'package:localization_pro/src/helpers/src/logger.dart';
 import 'package:localization_pro/src/models/models.dart';
+import '../utils/enums/src/log_type.dart';
 
-/// Manages localization resources for a Flutter application, handling the dynamic loading,
-/// adding, and removing of localized strings, with logging capabilities.
+/// Manages localization for the application, including loading, adding,
+/// and removing translations, and changing locales.
 class LocalizationManager {
-  /// Stores the localized strings loaded for the current locale.
+  /// Map of localized strings where keys are translation keys and values are translations.
   final Map<String, String> _localizedStrings = {};
 
-  /// Tracks the translations that have been loaded.
+  /// Set of included translations' names.
   final Set<String> _includedTranslations = {};
 
-  /// Current locale used by the localization manager.
+  /// The current locale being used by the localization manager.
   Locale currentLocale;
 
-  /// List of all supported locales and their respective translations.
+  /// List of supported locales and their respective translations.
   final List<SupportedLocale> supportedLocales;
 
-  /// Logger instance for handling debug output.
+  /// Indicates whether debug mode is enabled.
+  final bool debugMode;
+
+  /// Logger for logging messages with different log types.
   final Logger logger;
 
-  /// Constructs a localization manager with initial settings.
+  /// Default text to be used when a translation key is not found.
+  String defaultNotFoundText;
+
+  /// Constructs a [LocalizationManager] with the given parameters.
+  ///
+  /// [supportedLocales] is the list of supported locales.
+  /// [initialLocale] is the initial locale to be used.
+  /// [initialTranslations] is the list of initial translations to load.
+  /// [debugMode] indicates whether debug mode is enabled.
+  /// [defaultNotFoundText] is the default text to be used when a translation key is not found.
   LocalizationManager({
     required this.supportedLocales,
     required Locale initialLocale,
     required List<String> initialTranslations,
-    required bool debugMode,
+    required this.debugMode,
+    this.defaultNotFoundText = 'Translation not found',
   })  : currentLocale = initialLocale,
         logger = Logger(debugMode: debugMode) {
-    logger.log("Initializing Localization Manager");
     loadInitialTranslations(initialLocale, initialTranslations.toSet());
   }
 
-  /// Loads the initial translations for a given locale from the specified translations list.
+  /// Loads initial translations for the given [locale] and [initialTranslations].
+  ///
+  /// This method loads the initial set of translations specified by [initialTranslations]
+  /// for the specified [locale].
   void loadInitialTranslations(Locale locale, Set<String> initialTranslations) {
     logger.log(
-        "Loading initial translations for locale: ${locale.toLanguageTag()}");
+        "Loading initial translations for locale: ${locale.toLanguageTag()}",
+        type: LogType.init);
     for (String name in initialTranslations) {
       var translation = supportedLocales
           .firstWhere((l) => l.locale == locale)
@@ -48,19 +64,46 @@ class LocalizationManager {
     }
   }
 
-  /// Loads a specific translation, adding its content to the internal map of localized strings.
-  void loadTranslation(SupportedTranslation translation) {
-    logger.log("Loading translation: ${translation.name}");
-    rootBundle.loadString(translation.path).then((data) {
+  /// Loads a single translation from the specified [translation] object.
+  ///
+  /// This method reads the translation file, parses the JSON, and adds the translations
+  /// to the [_localizedStrings] map.
+  Future<void> loadTranslation(SupportedTranslation translation) async {
+    logger.log("Loading translation: ${translation.name}", type: LogType.info);
+    try {
+      final data = await rootBundle.loadString(translation.path);
       Map<String, dynamic> jsonMap = json.decode(data);
-      _localizedStrings
-          .addAll(jsonMap.map((key, value) => MapEntry(key, value.toString())));
+      _localizedStrings.addAll(flattenJsonMap(jsonMap));
       _includedTranslations.add(translation.name);
-      logger.log("Translation loaded: ${translation.name}");
-    });
+      logger.log("Translation loaded: ${translation.name}", type: LogType.info);
+    } catch (e) {
+      logger.log("Error loading translation: ${e.toString()}",
+          type: LogType.error);
+    }
   }
 
-  /// Adds a translation if it is not already included, triggering a UI rebuild.
+  /// Flattens a nested JSON map into a single-level map with dot-separated keys.
+  ///
+  /// This method takes a nested [json] map and recursively flattens it into a map
+  /// with keys representing the path to each value in the original map.
+  Map<String, String> flattenJsonMap(Map<String, dynamic> json,
+      [String prefix = '']) {
+    Map<String, String> flatMap = {};
+    json.forEach((key, value) {
+      String newPrefix = prefix.isEmpty ? key : "$prefix.$key";
+      if (value is Map) {
+        flatMap
+            .addAll(flattenJsonMap(value as Map<String, dynamic>, newPrefix));
+      } else {
+        flatMap[newPrefix] = value.toString();
+      }
+    });
+    return flatMap;
+  }
+
+  /// Adds a translation to the localization manager and marks the context for rebuild.
+  ///
+  /// This method loads the specified [translation] and adds it to the manager.
   void addTranslation(BuildContext context, SupportedTranslation translation) {
     if (!_includedTranslations.contains(translation.name)) {
       loadTranslation(translation);
@@ -68,40 +111,66 @@ class LocalizationManager {
     }
   }
 
-  /// Removes a translation and its associated keys from the internal map,
-  /// triggering a UI rebuild.
+  /// Removes a translation from the localization manager and marks the context for rebuild.
+  ///
+  /// This method removes the specified [translation] and updates the manager's state.
   void removeTranslation(
       BuildContext context, SupportedTranslation translation) {
-    logger.log("Attempting to remove translation: ${translation.name}");
+    logger.log("Attempting to remove translation: ${translation.name}",
+        type: LogType.info);
     rootBundle.loadString(translation.path).then((jsonString) {
       Map<String, dynamic> jsonMap = json.decode(jsonString);
       List<String> keysToRemove = jsonMap.keys.toList();
 
-      keysToRemove.forEach((key) {
+      // Now remove these keys from _localizedStrings
+      for (var key in keysToRemove) {
         _localizedStrings.remove(key);
-        logger.log("Removed key: $key from translation: ${translation.name}");
-      });
+        logger.log("Removed key: $key from translation: ${translation.name}",
+            type: LogType.info);
+      }
 
+      // Also remove the translation name from the list of included translations
       _includedTranslations.remove(translation.name);
-      logger.log("Translation removed: ${translation.name}");
+      logger.log("Translation removed: ${translation.name}",
+          type: LogType.info);
 
+      // Inform the widget tree about the update
       (context as Element).markNeedsBuild();
     }).catchError((error) {
-      logger.log("Error removing translation: ${error.toString()}");
+      logger.log("Error removing translation: ${error.toString()}",
+          type: LogType.error);
     });
   }
 
-  /// Changes the current locale, reloading all necessary translations and
-  /// triggering a UI rebuild.
+  /// Changes the current locale and reloads translations.
+  ///
+  /// This method sets the [newLocale] as the current locale and reloads the initial translations
+  /// for the new locale.
   void changeLocale(BuildContext context, Locale newLocale) {
-    logger.log("Changing locale to: ${newLocale.toLanguageTag()}");
+    logger.log("Changing locale to: ${newLocale.toLanguageTag()}",
+        type: LogType.info);
     currentLocale = newLocale;
     loadInitialTranslations(newLocale, _includedTranslations);
     (context as Element).markNeedsBuild();
   }
 
-  /// Retrieves a localized string by key, returning a default message if not found.
+  /// Translates a key to its localized string.
+  ///
+  /// This method returns the localized string for the given [key].
+  /// If the key is not found, it returns the [defaultNotFoundText].
   String translate(String key) {
-    return _localizedStrings[key] ?? 'Translation not found';
+    return _localizedStrings[key] ?? defaultNotFoundText;
+  }
+
+  /// Translates a key with parameters to its localized string.
+  ///
+  /// This method returns the localized string for the given [key] with the specified [params]
+  /// replaced in the translation string.
+  String translateWithParams(String key, Map<String, dynamic> params) {
+    String translation = translate(key);
+    params.forEach((paramKey, value) {
+      translation = translation.replaceAll('{$paramKey}', value.toString());
+    });
+    return translation;
   }
 }
