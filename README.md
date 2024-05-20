@@ -16,7 +16,7 @@ First, you need to add `Localization Pro` to your project. Insert the following 
 
 ```yaml
 dependencies:
-  localization_pro: ^1.0.0
+  localization_pro: ^x.y.z
 ```
 ### Step 2: Install the package
 After updating your pubspec.yaml, run the following command to install the package:
