@@ -36,9 +36,9 @@ void main() {
   // Initialize the localization manager.
   LocalizationManager locManager = LocalizationManager(
     supportedLocales: supportedLocales,
-    initialLocale: const Locale('en', 'US'),
+    initialLocale: const Locale('uz', 'UZ'),
     initialTranslations: ['1'],
-    debugMode: false,
+    debugMode: true,
   );
 
   // Run the application with the localization provider.
@@ -95,6 +95,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('Title: ${'title'.tr(context)}'), // Translated strings.
+            Text('make.plove.not.war'.tr(context)), // Translated strings.
             Text('1:${'one'.tr(context)}'),
             Text('2:${'two'.tr(context)}'),
             Text('3:${'three'.tr(context)}'),

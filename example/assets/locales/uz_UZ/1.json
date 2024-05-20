@@ -1,4 +1,11 @@
 {
   "title": "Bu o'zbek tili",
-  "one": "Bir"
+  "one": "Bir",
+  "make": {
+    "plove":{
+      "not": {
+        "war": "Palov qil, urush emas!"
+      }
+    }
+  }
 }

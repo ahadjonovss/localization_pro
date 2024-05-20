@@ -6,6 +6,15 @@
 A dynamic Flutter package for seamless localization management.
 
 `Localization Pro` simplifies the process of adding and managing multiple languages in your Flutter applications. Designed with flexibility in mind, it supports dynamic language switching, runtime translation updates, and provides a streamlined API to enhance the localization experience. Whether you're building a small app or a large scale project, `Localization Pro` makes it easy to deliver a localized interface that adapts to your users' languages on the fly.
+
+## Features
+
+- **Dynamic Language Management**: Load and switch languages on-the-fly without restarting the application.
+- **Nested JSON Translations**: Manage complex translation dictionaries with support for nested JSON structures.
+- **Parameterized Translations**: Dynamically insert values into translations using the `trParams` method.
+- **Default Not Found Text**: Specify a default message for missing translation keys to ensure your application never shows unhandled keys.
+
+
 ## Getting Started
 
 Welcome to `Localization Pro`, the dynamic localization solution for Flutter apps. This guide will help you integrate `Localization Pro` into your project effortlessly.

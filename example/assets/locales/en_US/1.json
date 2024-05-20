@@ -1,4 +1,11 @@
 {
   "title": "This is English",
-  "one": "One"
+  "one": "One",
+  "make": {
+    "plove":{
+      "not": {
+        "war": "Make Plove, not War!"
+      }
+    }
+  }
 }
