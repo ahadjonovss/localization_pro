@@ -7,13 +7,40 @@ A dynamic Flutter package for seamless localization management.
 
 `Localization Pro` simplifies the process of adding and managing multiple languages in your Flutter applications. Designed with flexibility in mind, it supports dynamic language switching, runtime translation updates, and provides a streamlined API to enhance the localization experience. Whether you're building a small app or a large scale project, `Localization Pro` makes it easy to deliver a localized interface that adapts to your users' languages on the fly.
 
-## Features
+# Features
 
-- **Dynamic Language Management**: Load and switch languages on-the-fly without restarting the application.
+`Localization Pro`, developed and supported by Samandar Ahadjonov in collaboration with the Uzbekistan Flutter community, provides a robust and flexible solution for managing localizations in Flutter applications. This package is designed to cater to the specific needs of developers both globally and within the vibrant tech community of Uzbekistan. Here are some of the standout features:
+
+## Community-Driven Development
+- **Supported by Uzbekistan's Flutter Community**: This package benefits from the active involvement and support of the local Flutter community, ensuring it meets the high standards and specific needs of developers in Uzbekistan and beyond.
+- **Endorsed by Samandar Ahadjonov**: As a prominent member of the Uzbekistan Flutter community, Samandar Ahadjonov’s leadership in the development of this package guarantees quality and relevance to local and international developers.
+
+## Dynamic Localization Management
+- **Real-time Language Switching**: Allows users to switch languages seamlessly at runtime without the need for restarting the app, thus enhancing user experience.
+- **Dynamic Translation Loading**: Efficiently load and unload translations as needed, ideal for applications with extensive and varied localization demands.
+
+## Developer-Friendly Features
+- **Simplified Setup**: Offers a straightforward setup process that reduces initial development overhead, making it easier to integrate into projects.
+- **Intuitive API**: Provides a clear and concise API that simplifies the management of translations and locale changes, enhancing code readability and maintainability.
 - **Nested JSON Translations**: Manage complex translation dictionaries with support for nested JSON structures.
 - **Parameterized Translations**: Dynamically insert values into translations using the `trParams` method.
 - **Default Not Found Text**: Specify a default message for missing translation keys to ensure your application never shows unhandled keys.
 
+
+
+## Performance and Flexibility
+- **Efficient Resource Usage**: Designed to minimize the impact on application performance, ensuring that localization does not detract from the user experience.
+- **Caching Mechanism**: Implements intelligent caching to expedite translation loading times and reduce operational overhead.
+
+## Comprehensive Language Support
+- **Multiple Locale Support**: Easily configure and manage multiple locales, allowing for smooth transitions based on user preferences or system settings.
+- **RTL Support**: Full support for Right-to-Left (RTL) languages, ensuring comprehensive usability for languages like Arabic and Hebrew.
+
+## Customizability and Extensibility
+- **Flexible Translation Files**: Utilizes JSON files for translations which can be edited and extended easily without altering the core app code.
+- **Modular Design**: Architecturally designed to be easily extendable, providing flexibility to adapt or enhance according to project-specific requirements.
+
+Supported and endorsed by the local tech community and led by Samandar Ahadjonov, `Localization Pro` is your go-to solution for adding efficient, dynamic localization to your Flutter apps.
 
 ## Getting Started
 
@@ -52,17 +79,17 @@ First, define the locales your application will support along with the correspon
 ```dart
 List<SupportedLocale> supportedLocales = [
   SupportedLocale(
+    locale: Locale('uz', 'UZ'),
+    translations: [
+      SupportedTranslation(name: 'home', path: 'assets/locales/uz_UZ/home.json'),
+      SupportedTranslation(name: 'settings', path: 'assets/locales/uz_UZ/settings.json'),
+    ]
+  ),
+  SupportedLocale(
     locale: Locale('en', 'US'),
     translations: [
       SupportedTranslation(name: 'home', path: 'assets/locales/en_US/home.json'),
       SupportedTranslation(name: 'settings', path: 'assets/locales/en_US/settings.json'),
-    ]
-  ),
-  SupportedLocale(
-    locale: Locale('es', 'ES'),
-    translations: [
-      SupportedTranslation(name: 'home', path: 'assets/locales/es_ES/home.json'),
-      SupportedTranslation(name: 'settings', path: 'assets/locales/es_ES/settings.json'),
     ]
   )
 ];
@@ -79,7 +106,7 @@ void main(){
 // Initialize the LocalizationManager
   LocalizationManager locManager = LocalizationManager(
     supportedLocales: supportedLocales,
-    initialLocale: Locale('en', 'US'),
+    initialLocale: Locale('uz', 'UZ'),
     initialTranslations: ['home'],
     debugMode: true  // Toggle this based on your environment
   );
@@ -122,36 +149,58 @@ Extend the String class to use translations easily in your UI code:
 Text('home_title'.tr(context))
 ```
 
+### Translation with Parameters:
+Suppose you have a translation entry that expects a name and a date. The JSON might look like this:
 
-# Features
+```json
+{
+  "greeting": "Hello, {name}! Today is {date}."
+}
+```
 
-`Localization Pro`, developed and supported by Samandar Ahadjonov in collaboration with the Uzbekistan Flutter community, provides a robust and flexible solution for managing localizations in Flutter applications. This package is designed to cater to the specific needs of developers both globally and within the vibrant tech community of Uzbekistan. Here are some of the standout features:
+#### Using trParams in Code:
+You can use the trParams method to insert dynamic values into this translation:
 
-## Community-Driven Development
-- **Supported by Uzbekistan's Flutter Community**: This package benefits from the active involvement and support of the local Flutter community, ensuring it meets the high standards and specific needs of developers in Uzbekistan and beyond.
-- **Endorsed by Samandar Ahadjonov**: As a prominent member of the Uzbekistan Flutter community, Samandar Ahadjonov’s leadership in the development of this package guarantees quality and relevance to local and international developers.
+``` dart
+String greeting = 'greeting'.trParams(context, {
+  'name': 'Alice',
+  'date': 'April 4th'
+});
+Text(greeting); // Displays: "Hello, Alice! Today is April 4th."
+```
 
-## Dynamic Localization Management
-- **Real-time Language Switching**: Allows users to switch languages seamlessly at runtime without the need for restarting the app, thus enhancing user experience.
-- **Dynamic Translation Loading**: Efficiently load and unload translations as needed, ideal for applications with extensive and varied localization demands.
+### Documentation for Handling Nested JSON Translations
 
-## Developer-Friendly Features
-- **Simplified Setup**: Offers a straightforward setup process that reduces initial development overhead, making it easier to integrate into projects.
-- **Intuitive API**: Provides a clear and concise API that simplifies the management of translations and locale changes, enhancing code readability and maintainability.
+#### Purpose:
+Handling nested JSON structures allows your localization system to manage complex translation entries organized in a hierarchical manner.
+#### Usage:
 
-## Performance and Flexibility
-- **Efficient Resource Usage**: Designed to minimize the impact on application performance, ensuring that localization does not detract from the user experience.
-- **Caching Mechanism**: Implements intelligent caching to expedite translation loading times and reduce operational overhead.
+#### Nested JSON Example:
+Your JSON file might contain nested keys like so:
 
-## Comprehensive Language Support
-- **Multiple Locale Support**: Easily configure and manage multiple locales, allowing for smooth transitions based on user preferences or system settings.
-- **RTL Support**: Full support for Right-to-Left (RTL) languages, ensuring comprehensive usability for languages like Arabic and Hebrew.
+``` json
+{
+  "settings": {
+    "audio": {
+      "volume": "Volume",
+      "balance": "Balance"
+    },
+    "display": {
+      "brightness": "Brightness",
+      "contrast": "Contrast"
+    }
+  }
+}
+```
 
-## Customizability and Extensibility
-- **Flexible Translation Files**: Utilizes JSON files for translations which can be edited and extended easily without altering the core app code.
-- **Modular Design**: Architecturally designed to be easily extendable, providing flexibility to adapt or enhance according to project-specific requirements.
+#### Fetching a Nested Translation:
+Access the nested translation using dot notation:
 
-Supported and endorsed by the local tech community and led by Samandar Ahadjonov, `Localization Pro` is your go-to solution for adding efficient, dynamic localization to your Flutter apps.
+``` dart
+
+Text('settings.audio.volume'.tr(context)); // Displays: "Volume"
+```
+
 # Frequently Asked Questions (FAQ)
 
 Here are answers to some of the most common questions about the `Localization Pro` package:
