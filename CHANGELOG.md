@@ -22,3 +22,7 @@
 ## 1.0.0+1
 
 * updated documentation
+
+## 1.0.1
+
+* added tr and trParams methods to the Text widget, added saveLocale option
