@@ -1,8 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localization_pro/src/helpers/src/logger.dart';
 import 'package:localization_pro/src/models/models.dart';
+import 'package:localization_pro/src/services/storage_service/storage_service.dart';
+
 import '../utils/enums/src/log_type.dart';
 
 /// Manages localization for the application, including loading, adding,
@@ -29,6 +32,8 @@ class LocalizationManager {
   /// Default text to be used when a translation key is not found.
   String defaultNotFoundText;
 
+  bool saveLocale;
+
   /// Constructs a [LocalizationManager] with the given parameters.
   ///
   /// [supportedLocales] is the list of supported locales.
@@ -42,9 +47,22 @@ class LocalizationManager {
     required List<String> initialTranslations,
     required this.debugMode,
     this.defaultNotFoundText = 'Translation not found',
+    this.saveLocale = true,
   })  : currentLocale = initialLocale,
         logger = Logger(debugMode: debugMode) {
-    loadInitialTranslations(initialLocale, initialTranslations.toSet());
+    _init(initialTranslations, initialLocale);
+  }
+
+  Future<void> _init(
+      List<String> initialTranslations, Locale initialLocale) async {
+    Locale? locale;
+    if (saveLocale) {
+      await StorageService.init();
+      locale = StorageService.getLocale(initialLocale);
+    }
+
+    currentLocale = locale ?? initialLocale;
+    loadInitialTranslations(currentLocale, initialTranslations.toSet());
   }
 
   /// Loads initial translations for the given [locale] and [initialTranslations].
@@ -146,10 +164,13 @@ class LocalizationManager {
   ///
   /// This method sets the [newLocale] as the current locale and reloads the initial translations
   /// for the new locale.
-  void changeLocale(BuildContext context, Locale newLocale) {
+  Future<void> changeLocale(BuildContext context, Locale newLocale) async {
     logger.log("Changing locale to: ${newLocale.toLanguageTag()}",
         type: LogType.info);
     currentLocale = newLocale;
+    if (saveLocale) {
+      await StorageService.setLocale(newLocale);
+    }
     loadInitialTranslations(newLocale, _includedTranslations);
     (context as Element).markNeedsBuild();
   }
