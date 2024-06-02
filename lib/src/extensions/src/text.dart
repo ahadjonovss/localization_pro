@@ -30,10 +30,9 @@ extension LocalizedTextExt on Text {
   ///
   /// Returns:
   ///   A Text widget displaying the localized string.
-  Text tr(BuildContext context) {
+  Text tr([BuildContext? context]) {
     return Text(
-      data!.tr(
-          context), // `data` is assumed to be a String (the text content of this widget).
+      data!.tr(context), // `data` is assumed to be a String (the text content of this widget).
       style: style,
       textAlign: textAlign,
       overflow: overflow,
@@ -58,9 +57,9 @@ extension LocalizedTextExt on Text {
   ///
   /// Returns:
   ///   A Text widget displaying the localized string with parameters.
-  Text trParams(BuildContext context, {required Map<String, dynamic> params}) {
+  Text trParams({required Map<String, dynamic> params, BuildContext? context}) {
     return Text(
-      data!.trParams(context, params),
+      data!.trParams(params, context),
       style: style,
       textAlign: textAlign,
       overflow: overflow,

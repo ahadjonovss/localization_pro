@@ -146,7 +146,7 @@ This switches the application's locale to Spanish and loads the appropriate tran
 ## Translating Strings
 Extend the String class to use translations easily in your UI code:
 ```Dart
-Text('home_title'.tr(context))
+Text('home_title'.tr())
 ```
 
 ### Translation with Parameters:
@@ -162,7 +162,7 @@ Suppose you have a translation entry that expects a name and a date. The JSON mi
 You can use the trParams method to insert dynamic values into this translation:
 
 ``` dart
-String greeting = 'greeting'.trParams(context, {
+String greeting = 'greeting'.trParams({
   'name': 'Alice',
   'date': 'April 4th'
 });
@@ -198,7 +198,7 @@ Access the nested translation using dot notation:
 
 ``` dart
 
-Text('settings.audio.volume'.tr(context)); // Displays: "Volume"
+Text('settings.audio.volume'.tr()); // Displays: "Volume"
 ```
 
 # Frequently Asked Questions (FAQ)
