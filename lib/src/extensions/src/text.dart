@@ -30,7 +30,7 @@ extension LocalizedTextExt on Text {
   ///
   /// Returns:
   ///   A Text widget displaying the localized string.
-  Text tr(BuildContext context) {
+  Text tr([BuildContext? context]) {
     return Text(
       data!.tr(context), // `data` is assumed to be a String (the text content of this widget).
       style: style,
