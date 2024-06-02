@@ -30,7 +30,7 @@ class LocalizationManager {
   final Logger logger;
 
   /// Default text to be used when a translation key is not found.
-  String defaultNotFoundText;
+  // String defaultNotFoundText;
 
   bool saveLocale;
 
@@ -46,7 +46,7 @@ class LocalizationManager {
     required Locale initialLocale,
     required List<String> initialTranslations,
     required this.debugMode,
-    this.defaultNotFoundText = 'Translation not found',
+    // this.defaultNotFoundText = 'Translation not found',
     this.saveLocale = true,
   })  : currentLocale = initialLocale,
         logger = Logger(debugMode: debugMode) {
@@ -219,7 +219,7 @@ class LocalizationManager {
   /// This method returns the localized string for the given [key].
   /// If the key is not found, it returns the [defaultNotFoundText].
   String translate(String key) {
-    return _localizedStrings[key] ?? defaultNotFoundText;
+    return _localizedStrings[key] ?? key;
   }
 
   /// Translates a key with parameters to its localized string.
