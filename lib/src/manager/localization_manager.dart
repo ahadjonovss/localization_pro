@@ -168,7 +168,6 @@ class LocalizationManager {
     (context as Element).markNeedsBuild();
   }
 
-
   /// Removes a translation from the localization manager and marks the context for rebuild.
   ///
   /// This method removes the specified [translation] and updates the manager's state.

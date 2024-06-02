@@ -32,6 +32,7 @@ class LocalizationProvider extends InheritedWidget {
     return true;
   }
 
+
   /// Provides access to the nearest [LocalizationManager] up the widget tree.
   ///
   /// Throws [FlutterError] if no [LocalizationProvider] is found in the widget tree,
@@ -39,21 +40,38 @@ class LocalizationProvider extends InheritedWidget {
   /// properly configured provider.
   ///
   /// [context] The build context which will be used to look up the [LocalizationProvider].
+  /// Retrieves the `LocalizationManager` instance associated with the nearest `LocalizationProvider` up the widget tree.
+  ///
+  /// This static method tries to obtain a `LocalizationProvider` from the widget tree starting from the provided `context`.
+  /// If `context` is null, it defaults to the current context held by `instanceKey`. If the `LocalizationProvider` is not
+  /// found, a `FlutterError` is thrown.
+  ///
+  /// Parameters:
+  ///   - `context` [BuildContext?]: Optional. The context from which to start looking for the `LocalizationProvider`.
+  ///     If null, the method uses a default context from `instanceKey`.
+  ///
+  /// Returns:
+  ///   - [LocalizationManager]: The `LocalizationManager` provided by the found `LocalizationProvider`.
+  ///
+  /// Throws:
+  ///   - [FlutterError]: If no `LocalizationProvider` is found either in the given context or the default context.
   static LocalizationManager of(BuildContext? context) {
     final LocalizationProvider? result;
 
+    // Check for LocalizationProvider starting from the provided context or default context.
     if (context != null) {
       result = context.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
     } else {
-      {
-        result = instanceKey.currentContext?.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
-      }
+      result = instanceKey.currentContext?.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
     }
 
+    // If no LocalizationProvider is found, throw an error.
     if (result == null) {
       throw FlutterError('LocalizationProvider not found in context');
     }
 
+    // Return the LocalizationManager from the found LocalizationProvider.
     return result.localizationManager;
   }
+
 }
