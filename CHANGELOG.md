@@ -22,3 +22,11 @@
 ## 1.0.0+1
 
 * updated documentation
+
+## 1.0.1
+
+* added tr and trParams methods to the Text widget, added saveLocale option
+
+## 1.0.2
+
+* removed context from tr methods, added reloadTranslation && reloadTranslations, added tr and trParams functions, it shows only key if it will not found and bug fixes
