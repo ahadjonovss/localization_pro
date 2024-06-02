@@ -16,7 +16,7 @@ extension LocalizedStringExt on String {
   ///   - context: The `BuildContext` used to find the `LocalizationProvider` and `LocalizationManager`.
   ///
   /// - Returns: The translated string, or the default not found text if the key is not found.
-  String tr(BuildContext context) {
+  String tr([BuildContext? context]) {
     return LocalizationProvider.of(context).translate(this);
   }
 
@@ -32,7 +32,7 @@ extension LocalizedStringExt on String {
   ///   - params: A map of parameters to replace placeholders in the translation string.
   ///
   /// - Returns: The translated string with parameters, or the default not found text if the key is not found.
-  String trParams(BuildContext context, Map<String, dynamic> params) {
+  String trParams(Map<String, dynamic> params, [BuildContext? context]) {
     return LocalizationProvider.of(context).translateWithParams(this, params);
   }
 }

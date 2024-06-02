@@ -7,6 +7,9 @@ import 'package:localization_pro/src/manager/localization_manager.dart';
 /// down the widget tree, allowing widgets to access localization functionalities
 /// provided by [LocalizationManager].
 class LocalizationProvider extends InheritedWidget {
+  /// The key used to access the [LocalizationProvider] instance.
+  static GlobalKey instanceKey = GlobalKey();
+
   /// The localization manager that holds and manages all localization data.
   final LocalizationManager localizationManager;
 
@@ -18,8 +21,7 @@ class LocalizationProvider extends InheritedWidget {
   /// [localizationManager].
   /// [localizationManager] The single instance of [LocalizationManager] to be provided
   /// to all dependent widgets.
-  const LocalizationProvider(
-      {super.key, required super.child, required this.localizationManager});
+  LocalizationProvider({Key? key, required super.child, required this.localizationManager}) : super(key: key ?? instanceKey);
 
   /// Determines whether the framework should notify widgets that inherit from this widget.
   ///
@@ -37,12 +39,21 @@ class LocalizationProvider extends InheritedWidget {
   /// properly configured provider.
   ///
   /// [context] The build context which will be used to look up the [LocalizationProvider].
-  static LocalizationManager of(BuildContext context) {
-    final LocalizationProvider? result =
-        context.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
+  static LocalizationManager of(BuildContext? context) {
+    final LocalizationProvider? result;
+
+    if (context != null) {
+      result = context.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
+    } else {
+      {
+        result = instanceKey.currentContext?.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
+      }
+    }
+
     if (result == null) {
       throw FlutterError('LocalizationProvider not found in context');
     }
+
     return result.localizationManager;
   }
 }
