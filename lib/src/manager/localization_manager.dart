@@ -129,6 +129,46 @@ class LocalizationManager {
     }
   }
 
+  /// Reloads a single specified translation and marks the UI as needing to be rebuilt.
+  ///
+  /// This function reloads a particular translation using the `loadTranslation` function and then
+  /// forces the widget associated with the provided context to rebuild, ensuring the updated
+  /// translation is displayed.
+  ///
+  /// Parameters:
+  ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
+  ///   - `translation` [SupportedTranslation]: The specific translation to reload.
+  void reLoadTranslation(BuildContext context, SupportedTranslation translation) {
+    // Load the specific translation.
+    loadTranslation(translation);
+    // Cast the context to an Element and mark it to rebuild the UI with the new translations.
+    (context as Element).markNeedsBuild();
+  }
+
+  /// Reloads all included translations and marks the UI as needing to be rebuilt.
+  ///
+  /// This function iterates over a predefined list of translation names, retrieves and reloads each
+  /// from the supported locales, and finally forces the widget in the provided context to rebuild.
+  /// This is used when multiple translations need to be updated at once.
+  ///
+  /// Parameters:
+  ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
+  void reLoadTranslations(BuildContext context) {
+    // Iterate through each translation name specified to be included.
+    for (String name in _includedTranslations) {
+      // Retrieve the translation by name for the current locale.
+      var translation = supportedLocales
+          .firstWhere((l) => l.locale == currentLocale)
+          .translations
+          .firstWhere((t) => t.name == name);
+      // Load the translation.
+      loadTranslation(translation);
+    }
+    // Cast the context to an Element and mark it to rebuild the UI with the new translations.
+    (context as Element).markNeedsBuild();
+  }
+
+
   /// Removes a translation from the localization manager and marks the context for rebuild.
   ///
   /// This method removes the specified [translation] and updates the manager's state.

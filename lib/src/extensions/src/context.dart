@@ -1,6 +1,6 @@
+import 'package:localization_pro/src/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:localization_pro/src/manager/localization_manager.dart';
-import 'package:localization_pro/src/provider/provider.dart';
 
 /// Extends [BuildContext] to provide easy access to [LocalizationManager] methods.
 ///
@@ -24,8 +24,38 @@ extension LocalizationExt on BuildContext {
         .firstWhere((l) => l.locale == locManager.currentLocale)
         .translations
         .firstWhere((t) => t.name == name);
-    locManager.addTranslation(this, translation);
+    locManager.addTranslation(this,translation);
   }
+
+
+  /// Reloads a specific translation by its name for the current locale.
+  ///
+  /// This function retrieves a translation matching the given name from the list of supported locales
+  /// and then reloads it using the localization manager (`locManager`).
+  ///
+  /// Parameters:
+  ///   - `name` [String]: The name of the translation to reload.
+  void reLoadTranslation(String name) {
+    // Retrieves the translations for the current locale.
+    var translation = locManager.supportedLocales
+    // Finds the locale that matches the current locale.
+        .firstWhere((l) => l.locale == locManager.currentLocale)
+    // From the matched locale, find the translation by its name.
+        .translations
+        .firstWhere((t) => t.name == name);
+    // Reloads the specific translation found above.
+    locManager.reLoadTranslation(this, translation);
+  }
+
+  /// Reloads all translations for the current context.
+  ///
+  /// This function triggers a reload of all translations within the current locale context
+  /// using the localization manager (`locManager`).
+  void reLoadiTranslations() {
+    // Reloads all translations using the localization manager for the current context.
+    locManager.reLoadTranslations(this);
+  }
+
 
   /// Removes a translation resource by its name.
   ///
@@ -38,7 +68,7 @@ extension LocalizationExt on BuildContext {
         .firstWhere((l) => l.locale == locManager.currentLocale)
         .translations
         .firstWhere((t) => t.name == name);
-    locManager.removeTranslation(this, translation);
+    locManager.removeTranslation(this,translation);
   }
 
   /// Changes the application's current locale.
@@ -48,6 +78,6 @@ extension LocalizationExt on BuildContext {
   ///
   /// [newLocale] The new locale to which the application should switch.
   void changeLocale(Locale newLocale) {
-    locManager.changeLocale(this, newLocale);
+    locManager.changeLocale(this,newLocale);
   }
 }
