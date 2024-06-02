@@ -94,14 +94,14 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Title: ${'title'.tr(context)}'), // Translated strings.
-            Text('make.plove.not.war'.tr(context)), // Translated strings.
-            Text('1:${'one'.tr(context)}'),
-            Text('2:${'two'.tr(context)}'),
-            Text('3:${'three'.tr(context)}'),
-            Text('4:${'four'.tr(context)}'),
-            Text('5:${'five'.tr(context)}'),
-            Text('6:${'six'.tr(context)}'),
+            Text('Title: ${'title'.tr()}'), // Translated strings.
+            Text('make.plove.not.war'.tr()), // Translated strings.
+            Text('1:${'one'.tr()}'),
+            Text('2:${'two'.tr()}'),
+            Text('3:${'three'.tr()}'),
+            Text('4:${'four'.tr()}'),
+            Text('5:${'five'.tr()}'),
+            Text('6:${'six'.tr()}'),
             const SizedBox(height: 20),
             const Text('Adding'), // Section title.
             // Buttons for adding translations.
