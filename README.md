@@ -19,27 +19,6 @@ A dynamic Flutter package for seamless localization management.
 - **Real-time Language Switching**: Allows users to switch languages seamlessly at runtime without the need for restarting the app, thus enhancing user experience.
 - **Dynamic Translation Loading**: Efficiently load and unload translations as needed, ideal for applications with extensive and varied localization demands.
 
-## Developer-Friendly Features
-- **Simplified Setup**: Offers a straightforward setup process that reduces initial development overhead, making it easier to integrate into projects.
-- **Intuitive API**: Provides a clear and concise API that simplifies the management of translations and locale changes, enhancing code readability and maintainability.
-- **Nested JSON Translations**: Manage complex translation dictionaries with support for nested JSON structures.
-- **Parameterized Translations**: Dynamically insert values into translations using the `trParams` method.
-- **Default Not Found Text**: Specify a default message for missing translation keys to ensure your application never shows unhandled keys.
-
-
-
-## Performance and Flexibility
-- **Efficient Resource Usage**: Designed to minimize the impact on application performance, ensuring that localization does not detract from the user experience.
-- **Caching Mechanism**: Implements intelligent caching to expedite translation loading times and reduce operational overhead.
-
-## Comprehensive Language Support
-- **Multiple Locale Support**: Easily configure and manage multiple locales, allowing for smooth transitions based on user preferences or system settings.
-- **RTL Support**: Full support for Right-to-Left (RTL) languages, ensuring comprehensive usability for languages like Arabic and Hebrew.
-
-## Customizability and Extensibility
-- **Flexible Translation Files**: Utilizes JSON files for translations which can be edited and extended easily without altering the core app code.
-- **Modular Design**: Architecturally designed to be easily extendable, providing flexibility to adapt or enhance according to project-specific requirements.
-
 Supported and endorsed by the local tech community and led by Samandar Ahadjonov, `Localization Pro` is your go-to solution for adding efficient, dynamic localization to your Flutter apps.
 
 ## Getting Started
