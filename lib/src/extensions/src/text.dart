@@ -58,7 +58,8 @@ extension LocalizedTextExt on Text {
   ///
   /// Returns:
   ///   A Text widget displaying the localized string with parameters.
-  Text trParams({required Map<String, dynamic> namedArgs, BuildContext? context}) {
+  Text trParams(
+      {required Map<String, dynamic> namedArgs, BuildContext? context}) {
     return Text(
       data!.trParams(namedArgs, context),
       style: style,
@@ -67,8 +68,26 @@ extension LocalizedTextExt on Text {
     );
   }
 
+  /// Creates a text widget that displays pluralized localization of a text based on the provided `count`.
+  ///
+  /// This function is an extension on `Data` and uses the `trPlural` method from a localization delegate
+  /// to handle the pluralization of the text based on the current locale set in the app context.
+  ///
+  /// Parameters:
+  ///   - `count`: The number to determine the form of pluralization.
+  ///   - `context` (optional): The build context that holds the locale information. If not provided,
+  ///     the function may use a default or fallback locale.
+  ///
+  /// Returns:
+  ///   A `Text` widget displaying the localized, pluralized text with the specified style, alignment,
+  ///   and text overflow handling.
+  ///
+  /// Example:
+  /// ```dart
+  /// Text trPluralWidget = yourDataObject.trPlural(3, context: context);
+  /// ```
 
-  Text trPlural(int count,{BuildContext? context}) {
+  Text trPlural(int count, {BuildContext? context}) {
     return Text(
       data!.trPlural(count, context),
       style: style,

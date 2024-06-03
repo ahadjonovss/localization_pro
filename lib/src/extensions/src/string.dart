@@ -47,11 +47,11 @@ extension LocalizedStringExt on String {
   /// - Returns: The translated string with parameters inserted, or a "Key not out found" message if the translation key is not found.
   /// - Throws: Throws an exception if `LocalizationProvider` is not found in the widget tree.
   String trParams(Map<String, dynamic> namedArgs, [BuildContext? context]) {
-    return LocalizationProvider.of(context).translateWithParams(this, namedArgs);
+    return LocalizationProvider.of(context)
+        .translateWithParams(this, namedArgs);
   }
 
-  String trPlural(int count,[BuildContext? context]) {
-    return LocalizationProvider.of(context).translatePlural(this,count);
+  String trPlural(int count, [BuildContext? context]) {
+    return LocalizationProvider.of(context).translatePlural(this, count);
   }
-
 }

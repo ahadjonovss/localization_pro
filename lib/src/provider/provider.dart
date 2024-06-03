@@ -21,7 +21,9 @@ class LocalizationProvider extends InheritedWidget {
   /// [localizationManager].
   /// [localizationManager] The single instance of [LocalizationManager] to be provided
   /// to all dependent widgets.
-  LocalizationProvider({Key? key, required super.child, required this.localizationManager}) : super(key: key ?? instanceKey);
+  LocalizationProvider(
+      {Key? key, required super.child, required this.localizationManager})
+      : super(key: key ?? instanceKey);
 
   /// Determines whether the framework should notify widgets that inherit from this widget.
   ///
@@ -31,7 +33,6 @@ class LocalizationProvider extends InheritedWidget {
   bool updateShouldNotify(LocalizationProvider oldWidget) {
     return true;
   }
-
 
   /// Provides access to the nearest [LocalizationManager] up the widget tree.
   ///
@@ -60,9 +61,11 @@ class LocalizationProvider extends InheritedWidget {
 
     // Check for LocalizationProvider starting from the provided context or default context.
     if (context != null) {
-      result = context.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
+      result =
+          context.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
     } else {
-      result = instanceKey.currentContext?.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
+      result = instanceKey.currentContext
+          ?.dependOnInheritedWidgetOfExactType<LocalizationProvider>();
     }
 
     // If no LocalizationProvider is found, throw an error.
@@ -73,5 +76,4 @@ class LocalizationProvider extends InheritedWidget {
     // Return the LocalizationManager from the found LocalizationProvider.
     return result.localizationManager;
   }
-
 }

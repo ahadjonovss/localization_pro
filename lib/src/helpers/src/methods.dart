@@ -18,8 +18,9 @@ import 'package:localization_pro/src/extensions/src/string.dart';
 ///     it tries to use the nearest context available.
 ///
 /// - Returns: The translated string corresponding to the given key.
-String tr(String key, {BuildContext? context,Map<String,dynamic>? namedArgs}) {
-  if(namedArgs!=null){
+String tr(String key,
+    {BuildContext? context, Map<String, dynamic>? namedArgs}) {
+  if (namedArgs != null) {
     return key.trParams(namedArgs);
   }
   return key.tr(context);

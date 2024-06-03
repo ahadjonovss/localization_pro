@@ -6,7 +6,6 @@
 /// components required for managing and applying localizations in their Flutter applications.
 library;
 
-
 export 'package:flutter/material.dart';
 // Exporting extensions that enhance BuildContext and String with localization capabilities.
 export 'package:localization_pro/src/extensions/extensions.dart';
@@ -18,6 +17,3 @@ export 'package:localization_pro/src/models/models.dart';
 export 'package:localization_pro/src/provider/provider.dart';
 // Exporting the helpers to use in project
 export 'package:localization_pro/src/helpers/helpers.dart';
-
-
-
