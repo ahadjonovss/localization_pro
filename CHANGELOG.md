@@ -30,3 +30,7 @@
 ## 1.0.2
 
 * removed context from tr methods, added reloadTranslation && reloadTranslations, added tr and trParams functions, it shows only key if it will not found and bug fixes
+
+## 1.0.2+2
+
+* bugs fixed
