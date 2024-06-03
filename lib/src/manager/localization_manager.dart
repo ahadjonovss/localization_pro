@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localization_pro/src/helpers/src/logger.dart';
+import 'package:localization_pro/src/manager/src/loader.dart';
+import 'package:localization_pro/src/manager/src/translator.dart';
 import 'package:localization_pro/src/models/models.dart';
 import 'package:localization_pro/src/services/storage_service/storage_service.dart';
-
 import '../utils/enums/src/log_type.dart';
 
 /// Manages localization for the application, including loading, adding,
@@ -13,9 +13,6 @@ import '../utils/enums/src/log_type.dart';
 class LocalizationManager {
   /// Map of localized strings where keys are translation keys and values are translations.
   final Map<String, dynamic> _localizedStrings = {};
-
-  /// Set of included translations' names.
-  final Set<String> _includedTranslations = {};
 
   /// The current locale being used by the localization manager.
   Locale currentLocale;
@@ -33,6 +30,9 @@ class LocalizationManager {
   // String defaultNotFoundText;
 
   bool saveLocale;
+
+  late final TranslatorPro translator;
+  late final LoaderPro loader;
 
   /// Constructs a [LocalizationManager] with the given parameters.
   ///
@@ -62,82 +62,40 @@ class LocalizationManager {
     }
 
     currentLocale = locale ?? initialLocale;
+    translator = TranslatorPro();
     loadInitialTranslations(currentLocale, initialTranslations.toSet());
   }
 
   /// Loads initial translations for the given [locale] and [initialTranslations].
-  ///
-  /// This method loads the initial set of translations specified by [initialTranslations]
-  /// for the specified [locale].
-  void loadInitialTranslations(Locale locale, Set<String> initialTranslations) {
-    logger.log(
-        "Loading initial translations for locale: ${locale.toLanguageTag()}",
-        type: LogType.init);
-    for (String name in initialTranslations) {
-      var translation = supportedLocales
-          .firstWhere((l) => l.locale == locale)
-          .translations
-          .firstWhere((t) => t.name == name);
-      loadTranslation(translation);
-    }
+  Future<void> loadInitialTranslations(
+      Locale locale, Set<String> initialTranslations) async {
+    loadTranslations(locale, initialTranslations);
   }
 
   /// Loads a single translation from the specified [translation] object.
-  ///
-  /// This method reads the translation file, parses the JSON, and adds the translations
-  /// to the [_localizedStrings] map.
   Future<void> loadTranslation(SupportedTranslation translation) async {
-    logger.log("Loading translation: ${translation.name}", type: LogType.info);
-    try {
-      final data = await rootBundle.loadString(translation.path);
-      Map<String, dynamic> jsonMap = json.decode(data);
-      _localizedStrings.addAll(flattenJsonMap(jsonMap));
-      _includedTranslations.add(translation.name);
-      logger.log("Translation loaded: ${translation.name}", type: LogType.info);
-    } catch (e) {
-      logger.log("Error loading translation: ${e.toString()}",
-          type: LogType.error);
-    }
+    Map<String, dynamic> newTrs = await loader.loadTranslation(translation,
+        supportedLocales: supportedLocales);
+    _localizedStrings.addAll(newTrs);
   }
 
-  /// Flattens a nested JSON map into a single-level map with dot-separated keys.
-  ///
-  /// This method takes a nested [json] map and recursively flattens it into a map
-  /// with keys representing the path to each value in the original map.
-  Map<String, String> flattenJsonMap(Map<String, dynamic> json,
-      [String prefix = '']) {
-    Map<String, String> flatMap = {};
-    json.forEach((key, value) {
-      String newPrefix = prefix.isEmpty ? key : "$prefix.$key";
-      if (value is Map) {
-        flatMap
-            .addAll(flattenJsonMap(value as Map<String, dynamic>, newPrefix));
-      } else {
-        flatMap[newPrefix] = value.toString();
-      }
-    });
-    return flatMap;
+  Future<void> loadTranslations(Locale locale, Set<String> translations) async {
+    Map<String, dynamic> newTrs = await loader.loadTranslations(locale,
+        supportedLocales: supportedLocales, trs: translations);
+    _localizedStrings.addAll(newTrs);
   }
 
   /// Adds a translation to the localization manager and marks the context for rebuild.
   ///
   /// This method loads the specified [translation] and adds it to the manager.
   void addTranslation(BuildContext context, SupportedTranslation translation) {
-    if (!_includedTranslations.contains(translation.name)) {
+    if (!loader.includedTranslations.contains(translation.name)) {
       loadTranslation(translation);
       (context as Element).markNeedsBuild();
     }
   }
 
   /// Reloads a single specified translation and marks the UI as needing to be rebuilt.
-  ///
-  /// This function reloads a particular translation using the `loadTranslation` function and then
-  /// forces the widget associated with the provided context to rebuild, ensuring the updated
-  /// translation is displayed.
-  ///
-  /// Parameters:
-  ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
-  ///   - `translation` [SupportedTranslation]: The specific translation to reload.
   void reLoadTranslation(
       BuildContext context, SupportedTranslation translation) {
     // Load the specific translation.
@@ -147,24 +105,8 @@ class LocalizationManager {
   }
 
   /// Reloads all included translations and marks the UI as needing to be rebuilt.
-  ///
-  /// This function iterates over a predefined list of translation names, retrieves and reloads each
-  /// from the supported locales, and finally forces the widget in the provided context to rebuild.
-  /// This is used when multiple translations need to be updated at once.
-  ///
-  /// Parameters:
-  ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
   void reLoadTranslations(BuildContext context) {
-    // Iterate through each translation name specified to be included.
-    for (String name in _includedTranslations) {
-      // Retrieve the translation by name for the current locale.
-      var translation = supportedLocales
-          .firstWhere((l) => l.locale == currentLocale)
-          .translations
-          .firstWhere((t) => t.name == name);
-      // Load the translation.
-      loadTranslation(translation);
-    }
+    loadTranslations(currentLocale, loader.includedTranslations);
     // Cast the context to an Element and mark it to rebuild the UI with the new translations.
     (context as Element).markNeedsBuild();
   }
@@ -188,7 +130,7 @@ class LocalizationManager {
       }
 
       // Also remove the translation name from the list of included translations
-      _includedTranslations.remove(translation.name);
+      loader.removeTranslation(translation.name);
       logger.log("Translation removed: ${translation.name}",
           type: LogType.info);
 
@@ -211,7 +153,7 @@ class LocalizationManager {
     if (saveLocale) {
       await StorageService.setLocale(newLocale);
     }
-    loadInitialTranslations(newLocale, _includedTranslations);
+    loadInitialTranslations(newLocale, loader.includedTranslations);
     (context as Element).markNeedsBuild();
   }
 
@@ -220,7 +162,7 @@ class LocalizationManager {
   /// This method returns the localized string for the given [key].
   /// If the key is not found, it returns the [defaultNotFoundText].
   String translate(String key) {
-    return _localizedStrings[key] ?? key;
+    return translator.translate(key, _localizedStrings);
   }
 
   /// Translates a key with parameters to its localized string.
@@ -228,11 +170,7 @@ class LocalizationManager {
   /// This method returns the localized string for the given [key] with the specified [namedArgs]
   /// replaced in the translation string.
   String translateWithParams(String key, Map<String, dynamic> namedArgs) {
-    String translation = translate(key);
-    namedArgs.forEach((paramKey, value) {
-      translation = translation.replaceAll('{$paramKey}', value.toString());
-    });
-    return translation;
+    return translator.translateWithParams(key, namedArgs, _localizedStrings);
   }
 
   /// Translates a key with plural handling based on the count.
@@ -240,30 +178,6 @@ class LocalizationManager {
   /// [count]: The quantity for which the correct plural form is determined.
   /// Returns the appropriate plural string according to the [count].
   String translatePlural(String key, int count) {
-    String pluralCategory = _getPluralCategory(count);
-    String newKey = '$key.$pluralCategory';
-    String? translation =
-        _localizedStrings[newKey] ?? _localizedStrings[key]?['$key.other'];
-
-    translation ??= key;
-
-    return translation.replaceFirst('{}', count.toString());
-  }
-
-  /// Determines the plural category based on the given [count].
-  /// Returns a string key representing the plural category.
-  String _getPluralCategory(int count) {
-    if (count == 0) {
-      return 'zero';
-    } else if (count == 1) {
-      return 'one';
-    } else if (count == 2) {
-      return 'two';
-    } else if (count > 2 && count < 5) {
-      return 'few';
-    } else if (count >= 5) {
-      return 'many';
-    }
-    return 'other';
+    return translator.translatePlural(key, count, _localizedStrings);
   }
 }
