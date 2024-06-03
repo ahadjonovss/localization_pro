@@ -58,9 +58,9 @@ extension LocalizedTextExt on Text {
   ///
   /// Returns:
   ///   A Text widget displaying the localized string with parameters.
-  Text trParams({required Map<String, dynamic> params, BuildContext? context}) {
+  Text trParams({required Map<String, dynamic> namedArgs, BuildContext? context}) {
     return Text(
-      data!.trParams(params, context),
+      data!.trParams(namedArgs, context),
       style: style,
       textAlign: textAlign,
       overflow: overflow,

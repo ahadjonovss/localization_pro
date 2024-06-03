@@ -224,11 +224,11 @@ class LocalizationManager {
 
   /// Translates a key with parameters to its localized string.
   ///
-  /// This method returns the localized string for the given [key] with the specified [params]
+  /// This method returns the localized string for the given [key] with the specified [namedArgs]
   /// replaced in the translation string.
-  String translateWithParams(String key, Map<String, dynamic> params) {
+  String translateWithParams(String key, Map<String, dynamic> namedArgs) {
     String translation = translate(key);
-    params.forEach((paramKey, value) {
+    namedArgs.forEach((paramKey, value) {
       translation = translation.replaceAll('{$paramKey}', value.toString());
     });
     return translation;

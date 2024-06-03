@@ -18,28 +18,9 @@ import 'package:localization_pro/src/extensions/src/string.dart';
 ///     it tries to use the nearest context available.
 ///
 /// - Returns: The translated string corresponding to the given key.
-String tr(String key, {BuildContext? context}) {
+String tr(String key, {BuildContext? context,Map<String,dynamic>? namedArgs}) {
+  if(namedArgs!=null){
+    return key.trParams(namedArgs);
+  }
   return key.tr(context);
-}
-
-/// Translates a given string key with parameters using the localization facilities provided by `LocalizedStringExt` extension.
-///
-/// This function wraps the `trParams` method of the `LocalizedStringExt` extension to allow for dynamic translations
-/// where placeholders in the string can be replaced with provided parameter values. It is useful for customized translations
-/// such as "Hello, {name}!" where `params` would be `{'name': 'John'}`.
-///
-/// Usage example:
-/// ```dart
-/// Text(trParams('greeting', params: {'name': 'John'}))
-/// ```
-///
-/// - Parameters:
-///   - key: The key for the string that needs to be translated with parameters.
-///   - params: A map containing the parameters to replace the placeholders in the string.
-///   - context: Optional. The `BuildContext` used to find the `LocalizationProvider`. If not provided,
-///     it tries to use the nearest context available.
-///
-/// - Returns: The translated string with parameters inserted.
-String trParams(String key, {required Map<String, dynamic> params, BuildContext? context}) {
-  return key.trParams(params, context);
 }
