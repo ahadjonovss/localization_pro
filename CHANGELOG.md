@@ -34,3 +34,7 @@
 ## 1.0.2+2
 
 * bugs fixed
+
+## 1.0.3
+
+* added trPlural methods

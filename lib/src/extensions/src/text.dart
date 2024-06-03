@@ -66,4 +66,14 @@ extension LocalizedTextExt on Text {
       overflow: overflow,
     );
   }
+
+
+  Text trPlural(int count,{BuildContext? context}) {
+    return Text(
+      data!.trPlural(count, context),
+      style: style,
+      textAlign: textAlign,
+      overflow: overflow,
+    );
+  }
 }

@@ -21,4 +21,4 @@ export 'package:localization_pro/src/helpers/src/logger.dart';
 /// localization files or databases, and substituting variables and placeholders as needed.
 /// This class is crucial for applications that need to handle dynamic content translation
 /// in multiple languages efficiently.
-export 'package:localization_pro/src/helpers/src/translator.dart';
+export 'package:localization_pro/src/helpers/src/methods.dart';

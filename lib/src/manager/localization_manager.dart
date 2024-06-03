@@ -12,7 +12,7 @@ import '../utils/enums/src/log_type.dart';
 /// and removing translations, and changing locales.
 class LocalizationManager {
   /// Map of localized strings where keys are translation keys and values are translations.
-  final Map<String, String> _localizedStrings = {};
+  final Map<String, dynamic> _localizedStrings = {};
 
   /// Set of included translations' names.
   final Set<String> _includedTranslations = {};
@@ -138,7 +138,8 @@ class LocalizationManager {
   /// Parameters:
   ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
   ///   - `translation` [SupportedTranslation]: The specific translation to reload.
-  void reLoadTranslation(BuildContext context, SupportedTranslation translation) {
+  void reLoadTranslation(
+      BuildContext context, SupportedTranslation translation) {
     // Load the specific translation.
     loadTranslation(translation);
     // Cast the context to an Element and mark it to rebuild the UI with the new translations.
@@ -232,5 +233,37 @@ class LocalizationManager {
       translation = translation.replaceAll('{$paramKey}', value.toString());
     });
     return translation;
+  }
+
+  /// Translates a key with plural handling based on the count.
+  /// [key]: The base key used for fetching the plural forms.
+  /// [count]: The quantity for which the correct plural form is determined.
+  /// Returns the appropriate plural string according to the [count].
+  String translatePlural(String key, int count) {
+    String pluralCategory = _getPluralCategory(count);
+    String newKey = '$key.$pluralCategory';
+    String? translation =
+        _localizedStrings[newKey] ?? _localizedStrings[key]?['$key.other'];
+
+    translation ??= key;
+
+    return translation.replaceFirst('{}', count.toString());
+  }
+
+  /// Determines the plural category based on the given [count].
+  /// Returns a string key representing the plural category.
+  String _getPluralCategory(int count) {
+    if (count == 0) {
+      return 'zero';
+    } else if (count == 1) {
+      return 'one';
+    } else if (count == 2) {
+      return 'two';
+    } else if (count > 2 && count < 5) {
+      return 'few';
+    } else if (count >= 5) {
+      return 'many';
+    }
+    return 'other';
   }
 }

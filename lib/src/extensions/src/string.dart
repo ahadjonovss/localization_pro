@@ -49,4 +49,9 @@ extension LocalizedStringExt on String {
   String trParams(Map<String, dynamic> namedArgs, [BuildContext? context]) {
     return LocalizationProvider.of(context).translateWithParams(this, namedArgs);
   }
+
+  String trPlural(int count,[BuildContext? context]) {
+    return LocalizationProvider.of(context).translatePlural(this,count);
+  }
+
 }
