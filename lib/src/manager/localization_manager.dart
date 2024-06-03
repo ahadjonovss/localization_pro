@@ -50,6 +50,8 @@ class LocalizationManager {
     this.saveLocale = true,
   })  : currentLocale = initialLocale,
         logger = Logger(debugMode: debugMode) {
+    translator = TranslatorPro();
+    loader = LoaderPro(logger);
     _init(initialTranslations, initialLocale);
   }
 
@@ -62,7 +64,6 @@ class LocalizationManager {
     }
 
     currentLocale = locale ?? initialLocale;
-    translator = TranslatorPro();
     loadInitialTranslations(currentLocale, initialTranslations.toSet());
   }
 
