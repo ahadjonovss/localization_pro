@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization_pro/src/helpers/src/reassamble.dart';
 import 'package:localization_pro/src/manager/localization_manager.dart';
 
 import '../models/src/supported_locale.dart';
@@ -31,13 +32,15 @@ class LocalizationProvider extends InheritedWidget {
   /// to all dependent widgets.
   LocalizationProvider(
       {Key? key,
-      required super.child,
+      required Widget child,
       required this.supportedLocales,
       required this.initialTranslations,
       this.debugMode = false,
       required this.initialLocale,
       this.saveLocale = false})
-      : super(key: key ?? instanceKey) {
+      : super(
+            key: key ?? instanceKey,
+            child: debugMode ? ReassembleListener(child: child) : child) {
     _localizationManager = LocalizationManager(
       supportedLocales: supportedLocales,
       initialLocale: initialLocale,

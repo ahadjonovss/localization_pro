@@ -81,10 +81,14 @@ class LocalizationManager {
     _localizedStrings.addAll(newTrs);
   }
 
-  Future<void> loadTranslations(Locale locale, Set<String> translations) async {
+  Future<void> loadTranslations(Locale locale, Set<String> translations,
+      [BuildContext? context]) async {
     Map<String, dynamic> newTrs = await loader.loadTranslations(locale,
         supportedLocales: supportedLocales, trs: translations);
     _localizedStrings.addAll(newTrs);
+    if (context != null) {
+      (context as Element).markNeedsBuild();
+    }
   }
 
   /// Adds a translation to the localization manager and marks the context for rebuild.
@@ -108,7 +112,7 @@ class LocalizationManager {
 
   /// Reloads all included translations and marks the UI as needing to be rebuilt.
   void reLoadTranslations(BuildContext context) {
-    loadTranslations(currentLocale, loader.includedTranslations);
+    loadTranslations(currentLocale, loader.includedTranslations, context);
     // Cast the context to an Element and mark it to rebuild the UI with the new translations.
     (context as Element).markNeedsBuild();
   }
