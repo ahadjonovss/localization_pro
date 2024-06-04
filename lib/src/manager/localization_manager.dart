@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:localization_pro/src/helpers/src/logger.dart';
 import 'package:localization_pro/src/manager/src/loader.dart';
 import 'package:localization_pro/src/manager/src/translator.dart';
@@ -62,8 +60,7 @@ class LocalizationManager {
   /// [initialLocale] is the locale to set initially.
   Future<void> _init(
       List<String> initialTranslations, Locale initialLocale) async {
-    logger.log("Started initialing Localization PRO...",
-        type: LogType.init);
+    logger.log("Started initialing Localization PRO...", type: LogType.init);
     Locale? locale;
     if (saveLocale) {
       await StorageService.init();
@@ -82,7 +79,7 @@ class LocalizationManager {
     loadTranslations(locale, initialTranslations);
     logger.log(
         "Finished Initializing Localization PRO with translations: "
-            "$initialTranslations and Locale: $currentLocale",
+        "$initialTranslations and Locale: $currentLocale",
         type: LogType.init);
   }
 
@@ -151,27 +148,22 @@ class LocalizationManager {
   /// [context] is the build context, used to mark the widget
   /// tree as needing a rebuild.
   /// [translation] is the translation to remove.
-  void removeTranslation(
-      BuildContext context, SupportedTranslation translation) {
-    rootBundle.loadString(translation.path).then((jsonString) {
-      Map<String, dynamic> jsonMap = json.decode(jsonString);
-      List<String> keysToRemove = jsonMap.keys.toList();
+  Future<void> removeTranslation(
+      BuildContext context, SupportedTranslation translation) async {
+    Map<String, dynamic> json = await loader.loadTranslation(translation,
+        supportedLocales: supportedLocales);
+    List<String> keysToRemove = json.keys.toList();
 
-      for (var key in keysToRemove) {
-        _localizedStrings.remove(key);
-        logger.log("Removed key: $key from translation: ${translation.name}",
-            type: LogType.info);
-      }
-
-      loader.removeTranslation(translation.name);
-      logger.log("Translation removed: ${translation.name}",
+    for (var key in keysToRemove) {
+      _localizedStrings.remove(key);
+      logger.log("Removed key: $key from translation: ${translation.name}",
           type: LogType.info);
+    }
 
-      (context as Element).markNeedsBuild();
-    }).catchError((error) {
-      logger.log("Error removing translation: ${error.toString()}",
-          type: LogType.error);
-    });
+    loader.removeTranslation(translation.name);
+    logger.log("Translation removed: ${translation.name}", type: LogType.info);
+
+    (context as Element).markNeedsBuild();
   }
 
   /// Changes the current locale and reloads translations.
