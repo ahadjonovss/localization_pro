@@ -30,17 +30,17 @@ class LocalizationProvider extends InheritedWidget {
   /// [localizationManager].
   /// [localizationManager] The single instance of [LocalizationManager] to be provided
   /// to all dependent widgets.
-  LocalizationProvider({
-    Key? key,
-    required Widget child,
-    required this.supportedLocales,
-    required this.initialTranslations,
-    this.debugMode = false,
-    required this.initialLocale,
-    this.saveLocale = false})
+  LocalizationProvider(
+      {Key? key,
+      required Widget child,
+      required this.supportedLocales,
+      required this.initialTranslations,
+      this.debugMode = false,
+      required this.initialLocale,
+      this.saveLocale = false})
       : super(
-      key: key ?? instanceKey,
-      child: debugMode ? ReassembleListener(child: child) : child) {
+            key: key ?? instanceKey,
+            child: debugMode ? ReassembleListener(child: child) : child) {
     _localizationManager = LocalizationManager(
       supportedLocales: supportedLocales,
       initialLocale: initialLocale,
