@@ -1,4 +1,10 @@
 {
-  "two": "TWO"
-
+  "two": "TWO",
+  "money": {
+    "one": "You have little money",
+    "two": "You have an average amount of money",
+    "few": "You have enough money {}",
+    "many": "You can live comfortably with your money {}",
+    "other": "You are rich! {}"
+  }
 }

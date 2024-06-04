@@ -7,5 +7,11 @@
         "war": "Make Plove, not War!"
       }
     }
-  }
+  },
+  "adding": "Adding",
+  "removing": "Removing",
+  "app_title": "Localization",
+  "english": "English",
+  "uzbek": "Uzbek"
+
 }

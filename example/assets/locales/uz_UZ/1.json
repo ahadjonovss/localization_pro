@@ -7,5 +7,10 @@
         "war": "Palov qil, urush emas!"
       }
     }
-  }
+  },
+  "adding": "Qo'shish",
+  "removing": "O'chirish",
+  "app_title": "Tarjima",
+  "english": "Ingliz tili",
+  "uzbek": "O'zbek tili"
 }

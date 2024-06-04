@@ -1,4 +1,11 @@
 {
-  "two": "IKKI"
+  "two": "IKKI",
+  "money": {
+    "one": "Pulingiz kam",
+    "two": "Pulingiz o'rtacha",
+    "few": "Pulingiz yetarli {}",
+    "many": "Pulingizga yashasa bo'ladi {}",
+    "other": "Siz boysiz! {}"
+  }
 
 }
