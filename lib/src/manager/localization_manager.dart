@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localization_pro/src/helpers/src/logger.dart';
@@ -154,7 +155,7 @@ class LocalizationManager {
     if (saveLocale) {
       await StorageService.setLocale(newLocale);
     }
-    loadInitialTranslations(newLocale, loader.includedTranslations);
+    loadTranslations(newLocale, loader.includedTranslations);
     (context as Element).markNeedsBuild();
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localization_pro/src/manager/localization_manager.dart';
 
+import '../models/src/supported_locale.dart';
+
 /// Provides a localization manager to the widget tree.
 ///
 /// This class uses the InheritedWidget pattern to propagate the localization manager
@@ -11,7 +13,13 @@ class LocalizationProvider extends InheritedWidget {
   static GlobalKey instanceKey = GlobalKey();
 
   /// The localization manager that holds and manages all localization data.
-  final LocalizationManager localizationManager;
+  late final LocalizationManager _localizationManager;
+
+  final List<SupportedLocale> supportedLocales;
+  final Locale initialLocale;
+  final List<String> initialTranslations;
+  final bool debugMode;
+  final bool saveLocale;
 
   /// Constructs a [LocalizationProvider] that exposes [localizationManager]
   /// to its descendants.
@@ -22,8 +30,21 @@ class LocalizationProvider extends InheritedWidget {
   /// [localizationManager] The single instance of [LocalizationManager] to be provided
   /// to all dependent widgets.
   LocalizationProvider(
-      {Key? key, required super.child, required this.localizationManager})
-      : super(key: key ?? instanceKey);
+      {Key? key,
+      required super.child,
+      required this.supportedLocales,
+      required this.initialTranslations,
+      this.debugMode = false,
+      required this.initialLocale,
+      this.saveLocale = false})
+      : super(key: key ?? instanceKey) {
+    _localizationManager = LocalizationManager(
+      supportedLocales: supportedLocales,
+      initialLocale: initialLocale,
+      initialTranslations: initialTranslations,
+      debugMode: debugMode,
+    );
+  }
 
   /// Determines whether the framework should notify widgets that inherit from this widget.
   ///
@@ -74,6 +95,6 @@ class LocalizationProvider extends InheritedWidget {
     }
 
     // Return the LocalizationManager from the found LocalizationProvider.
-    return result.localizationManager;
+    return result._localizationManager;
   }
 }
