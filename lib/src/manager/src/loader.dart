@@ -3,20 +3,26 @@ import 'package:flutter/services.dart';
 import 'package:localization_pro/localization_provider.dart';
 import '../../utils/enums/src/log_type.dart';
 
+/// Handles loading and managing translations.
 class LoaderPro {
+  /// Logger instance for logging messages.
   final Logger logger;
 
   /// Set of included translations' names.
   final Set<String> _includedTranslations = {};
 
+  /// Constructor for LoaderPro, initializes the logger.
   LoaderPro(this.logger);
 
-  get includedTranslations => _includedTranslations;
+  /// Gets the included translations.
+  Set<String> get includedTranslations => _includedTranslations;
 
   /// Loads a single translation from the specified [translation] object.
   ///
-  /// This method reads the translation file, parses the JSON, and adds the translations
-  /// to the [_localizedStrings] map.
+  /// This method reads the translation file, parses the JSON,
+  /// and adds the translations to the [_localizedStrings] map.
+  /// [translation] is the translation object to load.
+  /// [supportedLocales] is the list of supported locales.
   Future<Map<String, dynamic>> loadTranslation(
     SupportedTranslation translation, {
     required List<SupportedLocale> supportedLocales,
@@ -36,6 +42,11 @@ class LoaderPro {
     return localizedStrings;
   }
 
+  /// Loads translations for the given locale and set of translation keys.
+  ///
+  /// [locale] is the locale for which to load translations.
+  /// [supportedLocales] is the list of supported locales.
+  /// [trs] is the set of translation keys to load.
   Future<Map<String, dynamic>> loadTranslations(
     Locale locale, {
     required List<SupportedLocale> supportedLocales,
@@ -51,14 +62,14 @@ class LoaderPro {
           supportedLocales: supportedLocales);
       translations.addAll(newTrs);
     }
-
     return translations;
   }
 
   /// Flattens a nested JSON map into a single-level map with dot-separated keys.
   ///
-  /// This method takes a nested [json] map and recursively flattens it into a map
-  /// with keys representing the path to each value in the original map.
+  /// [json] is the nested JSON map to flatten.
+  /// [prefix] is the prefix for keys in the flattened map.
+  /// Returns a flattened map.
   Map<String, String> flattenJsonMap(Map<String, dynamic> json,
       [String prefix = '']) {
     Map<String, String> flatMap = {};
@@ -76,71 +87,65 @@ class LoaderPro {
 
   /// Loads initial translations for the given [locale] and [initialTranslations].
   ///
-  /// This method loads the initial set of translations specified by [initialTranslations]
-  /// for the specified [locale].
+  /// [locale] is the locale for which to load initial translations.
+  /// [supportedLocales] is the list of supported locales.
+  /// [initialTranslations] is the set of initial translation keys to load.
   Future<Map<String, dynamic>> loadInitialTranslations(
     Locale locale, {
     required List<SupportedLocale> supportedLocales,
     required Set<String> initialTranslations,
   }) async {
-    late Map<String, dynamic> translations;
     logger.log(
         "Loading initial translations for locale: ${locale.toLanguageTag()}",
         type: LogType.init);
-    translations = await loadTranslations(locale,
+    return await loadTranslations(locale,
         supportedLocales: supportedLocales, trs: initialTranslations);
-
-    return translations;
   }
 
-  /// Reloads a single specified translation and marks the UI as needing to be rebuilt.
+  /// Reloads a single specified translation.
   ///
-  /// This function reloads a particular translation using the `loadTranslation` function and then
-  /// forces the widget associated with the provided context to rebuild, ensuring the updated
-  /// translation is displayed.
-  ///
-  /// Parameters:
-  ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
-  ///   - `translation` [SupportedTranslation]: The specific translation to reload.
+  /// [translation] is the translation to reload.
+  /// [supportedLocales] is the list of supported locales.
   Future<Map<String, dynamic>> reLoadTranslation(
     SupportedTranslation translation,
     List<SupportedLocale> supportedLocales,
   ) async {
-    late Map<String, dynamic> translations;
-
-    // Load the specific translation.
-    translations =
-        await loadTranslation(supportedLocales: supportedLocales, translation);
-    return translations;
+    return await loadTranslation(translation,
+        supportedLocales: supportedLocales);
   }
 
-  /// Reloads all included translations and marks the UI as needing to be rebuilt.
+  /// Reloads all included translations.
   ///
-  /// This function iterates over a predefined list of translation names, retrieves and reloads each
-  /// from the supported locales, and finally forces the widget in the provided context to rebuild.
-  /// This is used when multiple translations need to be updated at once.
-  ///
-  /// Parameters:
-  ///   - `context` [BuildContext]: The context in which the widget resides that needs updating.
+  /// [supportedLocales] is the list of supported locales.
+  /// [currentLocale] is the current locale.
+  /// [trs] is the set of translation keys to reload.
   Future<Map<String, dynamic>> reLoadTranslations(
     List<SupportedLocale> supportedLocales,
     Locale currentLocale,
     Set<String> trs,
   ) async {
-    late Map<String, dynamic> translations;
-    translations = await loadTranslations(currentLocale,
+    return await loadTranslations(currentLocale,
         supportedLocales: supportedLocales, trs: trs);
-    return translations;
   }
 
+  /// Adds a translation to the set of included translations.
+  ///
+  /// [translation] is the name of the translation to add.
   void addTranslation(String translation) {
     _includedTranslations.add(translation);
   }
 
+  /// Removes a translation from the set of included translations.
+  ///
+  /// [translation] is the name of the translation to remove.
   void removeTranslation(String translation) {
-    _includedTranslations.add(translation);
+    _includedTranslations.remove(translation);
   }
 
+  /// Checks if a translation is included in the set of included translations.
+  ///
+  /// [translation] is the name of the translation to check.
+  /// Returns true if the translation is included, otherwise false.
   bool hasTranslation(String translation) {
     return _includedTranslations.contains(translation);
   }
