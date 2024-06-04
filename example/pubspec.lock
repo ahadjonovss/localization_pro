@@ -132,10 +132,10 @@ packages:
     dependency: "direct main"
     description:
       name: localization_pro
-      sha256: "1945e8f3bf83a74061d58f88418ceb4a767155bb7ef31ebdc147fa060f7ebf16"
+      sha256: b6c36b45e2c27935e663d3fcbb6c3fc8c2e715dd8490a6ecb0173596062175cf
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   matcher:
     dependency: transitive
     description:
