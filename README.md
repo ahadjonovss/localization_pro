@@ -82,19 +82,13 @@ Ensure your JSON translation files are structured properly and stored at the spe
 ``` Dart
 
 void main(){
-// Initialize the LocalizationManager
-  LocalizationManager locManager = LocalizationManager(
-    supportedLocales: supportedLocales,
-    initialLocale: Locale('uz', 'UZ'),
-    initialTranslations: ['home'],
-    debugMode: true  // Toggle this based on your environment
-  );
-
   // Run the app and wrap MyApp with LocalizationProvider
   runApp(LocalizationProvider(
-    localizationManager: locManager,
-    child: MyApp()
-  ));
+      supportedLocales: supportedLocales,
+      initialLocale: const Locale('uz', 'UZ'),
+      initialTranslations: ['1'],
+      debugMode: true,
+      child: MyApp()));
 }
 
 ```

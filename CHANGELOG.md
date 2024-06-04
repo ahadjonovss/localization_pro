@@ -38,3 +38,10 @@
 ## 1.0.3
 
 * added trPlural methods
+
+## 1.1.0
+
+* simplified initialization of LocalizationProvider
+* added automatically reloading translations when hot-reload fires
+* updated logs
+* bugs fixed
