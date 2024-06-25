@@ -9,8 +9,7 @@ class TranslatorPro {
 
   /// Translates a key with parameters to its localized string.
   ///
-  /// This method returns the localized string for the given [key]
-  /// with the specified [namedArgs]
+  /// This method returns the localized string for the given [key] with the specified [namedArgs]
   /// replaced in the translation string.
   String translateWithParams(String key, Map<String, dynamic> namedArgs,
       Map<String, dynamic> localizedStrings) {

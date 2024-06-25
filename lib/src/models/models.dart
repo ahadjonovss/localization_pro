@@ -10,4 +10,6 @@ library;
 export 'package:localization_pro/src/models/src/supported_locale.dart';
 // Exporting the SupportedLocale class which represents a specific locale supported
 // by the application along with its associated translations.
+export 'package:localization_pro/src/models/src/translation.dart';
 export 'package:localization_pro/src/models/src/supported_translation.dart';
+

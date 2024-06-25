@@ -86,7 +86,7 @@ class LocalizationManager {
   /// Loads a single translation entry.
   ///
   /// [translation] is the translation to load.
-  Future<void> loadTranslation(SupportedTranslation translation) async {
+  Future<void> loadTranslation(Translation translation) async {
     Map<String, dynamic> newTrs = await loader.loadTranslation(translation,
         supportedLocales: supportedLocales);
     _localizedStrings.addAll(newTrs);
@@ -112,7 +112,7 @@ class LocalizationManager {
   ///
   /// [context] is the build context, used to mark the widget t
   /// ree as needing a rebuild. [translation] is the translation to add.
-  void addTranslation(BuildContext context, SupportedTranslation translation) {
+  void addTranslation(BuildContext context, Translation translation) {
     if (!loader.includedTranslations.contains(translation.name)) {
       loadTranslation(translation);
       (context as Element).markNeedsBuild();
@@ -126,7 +126,7 @@ class LocalizationManager {
   /// tree as needing a rebuild.
   /// [translation] is the translation to reload.
   void reLoadTranslation(
-      BuildContext context, SupportedTranslation translation) {
+      BuildContext context, Translation translation) {
     loadTranslation(translation);
     (context as Element).markNeedsBuild();
     logger.log("Reloaded Translation: ${translation.name}", type: LogType.info);
@@ -149,7 +149,7 @@ class LocalizationManager {
   /// tree as needing a rebuild.
   /// [translation] is the translation to remove.
   Future<void> removeTranslation(
-      BuildContext context, SupportedTranslation translation) async {
+      BuildContext context, Translation translation) async {
     Map<String, dynamic> json = await loader.loadTranslation(translation,
         supportedLocales: supportedLocales);
     List<String> keysToRemove = json.keys.toList();

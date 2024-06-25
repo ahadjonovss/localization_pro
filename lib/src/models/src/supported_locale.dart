@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:localization_pro/src/models/src/supported_translation.dart';
+import 'package:localization_pro/src/models/src/translation.dart';
 
 /// Represents a locale supported by the application, along with its associated translations.
 ///
@@ -19,7 +19,7 @@ class SupportedLocale {
   /// Each SupportedTranslation contains the information necessary to load and manage a set
   /// of localized strings for this locale, such as file paths or keys that correspond to
   /// localized content.
-  final List<SupportedTranslation> translations;
+  final List<Translation> translations;
 
   /// Constructs a SupportedLocale with a specific locale and list of translations.
   ///

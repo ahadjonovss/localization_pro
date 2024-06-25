@@ -56,21 +56,19 @@ The `Localization Pro` package offers comprehensive localization functionalities
 First, define the locales your application will support along with the corresponding translation files. Here's an example of how to set up supported locales and their translations:
 
 ```dart
-List<SupportedLocale> supportedLocales = [
-  SupportedLocale(
-    locale: Locale('uz', 'UZ'),
-    translations: [
-      SupportedTranslation(name: 'home', path: 'assets/locales/uz_UZ/home.json'),
-      SupportedTranslation(name: 'settings', path: 'assets/locales/uz_UZ/settings.json'),
-    ]
-  ),
-  SupportedLocale(
-    locale: Locale('en', 'US'),
-    translations: [
-      SupportedTranslation(name: 'home', path: 'assets/locales/en_US/home.json'),
-      SupportedTranslation(name: 'settings', path: 'assets/locales/en_US/settings.json'),
-    ]
-  )
+List<SupportedTranslation> supportedTranslations = [
+  SupportedTranslation(name: '1', paths: {
+    const Locale('en', 'US'): 'assets/locales/en_US/1.json',
+    const Locale('uz', 'UZ'): 'assets/locales/uz_UZ/1.json',
+  }),
+  SupportedTranslation(name: '2', paths: {
+    const Locale('en', 'US'): 'assets/locales/en_US/2.json',
+    const Locale('uz', 'UZ'): 'assets/locales/uz_UZ/2.json',
+  }),
+  SupportedTranslation(name: '3', paths: {
+    const Locale('en', 'US'): 'assets/locales/en_US/3.json',
+    const Locale('uz', 'UZ'): 'assets/locales/uz_UZ/3.json',
+  })
 ];
 
 ```
@@ -84,7 +82,7 @@ Ensure your JSON translation files are structured properly and stored at the spe
 void main(){
   // Run the app and wrap MyApp with LocalizationProvider
   runApp(LocalizationProvider(
-      supportedLocales: supportedLocales,
+      supportedTranslations: supportedTranslations,
       initialLocale: const Locale('uz', 'UZ'),
       initialTranslations: ['1'],
       debugMode: true,
