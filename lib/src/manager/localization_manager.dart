@@ -125,8 +125,7 @@ class LocalizationManager {
   /// [context] is the build context, used to mark the widget
   /// tree as needing a rebuild.
   /// [translation] is the translation to reload.
-  void reLoadTranslation(
-      BuildContext context, Translation translation) {
+  void reLoadTranslation(BuildContext context, Translation translation) {
     loadTranslation(translation);
     (context as Element).markNeedsBuild();
     logger.log("Reloaded Translation: ${translation.name}", type: LogType.info);

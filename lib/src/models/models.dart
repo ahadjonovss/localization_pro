@@ -12,4 +12,3 @@ export 'package:localization_pro/src/models/src/supported_locale.dart';
 // by the application along with its associated translations.
 export 'package:localization_pro/src/models/src/translation.dart';
 export 'package:localization_pro/src/models/src/supported_translation.dart';
-
