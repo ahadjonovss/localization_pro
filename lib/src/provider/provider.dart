@@ -11,6 +11,8 @@ import '../models/src/supported_locale.dart';
 /// This class uses the InheritedWidget pattern to propagate the localization manager
 /// down the widget tree, allowing widgets to access localization functionalities
 /// provided by [LocalizationManager].
+
+// ignore: must_be_immutable
 class LocalizationProvider extends InheritedWidget {
   /// The key used to access the [LocalizationProvider] instance.
   static GlobalKey instanceKey = GlobalKey();
