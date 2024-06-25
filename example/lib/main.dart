@@ -4,34 +4,28 @@ import 'package:localization_pro/localization_provider.dart';
 /// Initializes the localization manager with supported locales and translations.
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  List<SupportedLocale> supportedLocales = [
-    // English locale with multiple translation files.
-    SupportedLocale(
-      locale: const Locale('en', 'US'),
-      translations: [
-        SupportedTranslation(name: '1', path: 'assets/locales/en_US/1.json'),
-        SupportedTranslation(name: '2', path: 'assets/locales/en_US/2.json'),
-        SupportedTranslation(name: '3', path: 'assets/locales/en_US/3.json'),
-      ],
-    ),
-    // Uzbek locale with multiple translation files.
-    SupportedLocale(
-      locale: const Locale('uz', 'UZ'),
-      translations: [
-        SupportedTranslation(name: '1', path: 'assets/locales/uz_UZ/1.json'),
-        SupportedTranslation(name: '2', path: 'assets/locales/uz_UZ/2.json'),
-        SupportedTranslation(name: '3', path: 'assets/locales/uz_UZ/3.json'),
-      ],
-    ),
+  List<SupportedTranslation> supportedTranslations = [
+    SupportedTranslation(name: '1', paths: {
+      const Locale('en', 'US'): 'assets/locales/en_US/1.json',
+      const Locale('uz', 'UZ'): 'assets/locales/uz_UZ/1.json',
+    }),
+    SupportedTranslation(name: '2', paths: {
+      const Locale('en', 'US'): 'assets/locales/en_US/2.json',
+      const Locale('uz', 'UZ'): 'assets/locales/uz_UZ/2.json',
+    }),
+    SupportedTranslation(name: '3', paths: {
+      const Locale('en', 'US'): 'assets/locales/en_US/3.json',
+      const Locale('uz', 'UZ'): 'assets/locales/uz_UZ/3.json',
+    })
   ];
 
   // Run the application with the localization provider.
   runApp(LocalizationProvider(
-      supportedLocales: supportedLocales,
+      supportedTranslations: supportedTranslations,
       initialLocale: const Locale('uz', 'UZ'),
-      initialTranslations: ['1'],
+      initialTranslations: const ['1'],
       debugMode: true,
-      child: MyApp()));
+      child: const MyApp()));
 }
 
 /// The root widget of the application.
@@ -42,7 +36,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Dynamic Localization Demo',
       home: HomeScreen(),
     );
@@ -54,6 +48,8 @@ class MyApp extends StatelessWidget {
 /// Provides interactive elements to test dynamic localization functionality such as adding,
 /// removing translations, and changing the locale.
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Helper function to create buttons for adding or removing translations.
@@ -61,6 +57,8 @@ class HomeScreen extends StatelessWidget {
       return TextButton(
           onPressed: () {
             if (isAdd) {
+              context.reloadTranslations();
+              context.reloadTranslation(name);
               context.addTranslation(name);
             } else {
               context.removeTranslation(name);
@@ -80,10 +78,11 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             Text('(1) Title: ${'title'.tr()}'), // Translated strings.
             Text('(1) ${'make.plove.not.war'.tr()}'), // Translated strings.
-            Text('(1) ${'one'.tr()}'),
+            Text('(1) ${tr('one.a.b.c', namedArgs: {'name': "Shavkat"})}'),
             const SizedBox(height: 20),
             Text('(2) ${'two'.tr()}'),
-            Text('(2) ${'money'.trPlural(3)}'),
+            Text('(2) ${tr('money', count: 3, namedArgs: {'name': "Salom"})}'),
+
             const SizedBox(height: 40),
             Text('adding'.tr()), // Section title.
             Row(
@@ -111,12 +110,12 @@ class HomeScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () =>
                       context.changeLocale(const Locale('uz', 'UZ')),
-                  child:  Text('uzbek'.tr()),
+                  child: Text('uzbek'.tr()),
                 ),
                 ElevatedButton(
                   onPressed: () =>
                       context.changeLocale(const Locale('en', 'US')),
-                  child:  Text('english'.tr()),
+                  child: Text('english'.tr()),
                 ),
               ],
             )
