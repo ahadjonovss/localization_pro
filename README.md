@@ -140,6 +140,58 @@ String greeting = 'greeting'.trParams({
 Text(greeting); // Displays: "Hello, Alice! Today is April 4th."
 ```
 
+### `trPlural` Function
+The `trPlural` function is used to translate text keys into their appropriate plural forms based on the given count. This function is essential for handling pluralization in different locales.
+
+#### Parameters:
+- `count`: The number used to determine the plural form of the translation.
+- `context`: (Optional) The build context from which the locale is resolved. This is used to access the correct localized data.
+
+#### Usage:
+
+```dart
+// Usage of trPlural in a Text widget for singular or plural forms based on the count.
+String singleOrPlural = trPlural(1);
+Text(singleOrPlural); // Displays 'item' if count is 1 or 'items' if more
+
+// Example in a full sentence where count influences the translation
+int itemCount = 3;
+Text(trPlural(itemCount) + ' remaining in your cart'); // Could translate to '3 items remaining in your cart'
+
+```
+
+
+### `tr` Function
+The `tr` function is designed to translate text keys into localized strings based on the current locale settings. It supports basic translation, context-based translation, dynamic string formatting with named arguments, and pluralization. This function is ideal for integrating localization directly within UI components like `Text` widgets.
+
+#### Parameters:
+- `key`: The key corresponding to the text that needs to be translated.
+- `context`: (Optional) The build context from which the locale is resolved.
+- `namedArgs`: (Optional) A map of named arguments used for string formatting within the translation.
+- `count`: (Optional) An integer used for handling plural forms in translations.
+
+#### Usage in `Text` Widget:
+
+```dart
+// Basic translation directly in a Text widget
+Text(tr('hello'))
+
+// Translation with context in a Text widget
+Text(tr('hello', context: context))
+
+// Translation with named arguments in a Text widget
+Text(tr('welcome', namedArgs: {'name': 'Alice'}))
+
+// Translation with pluralization in a Text widget
+Text(tr('cats', count: 5))
+
+// Combined named arguments and pluralization in a Text widget
+// Useful for complex translations involving both dynamic data and plural forms.
+Text(tr('party_invitation', namedArgs: {'name': 'Alice', 'numberOfGuests': '5'}, count: 5))
+
+```
+
+
 ### Documentation for Handling Nested JSON Translations
 
 #### Purpose:
