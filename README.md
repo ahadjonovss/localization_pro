@@ -96,13 +96,13 @@ To dynamically add or remove translations during runtime, you can use methods pr
 
 ## Adding a Translation
 ``` Dart
-context.addTranslation('settings');
+context.addTranslation('1');
 ```
 This would load the 'settings' translation for the current locale.
 
 ## Removing a Translation
 ``` Dart
-context.removeTranslation('settings');
+context.removeTranslation('1');
 ```
 This would unload the 'settings' translation from the current locale.
 
@@ -113,6 +113,21 @@ Change the application's locale dynamically and reload the necessary translation
 context.changeLocale(Locale('es', 'ES'));
 ```
 This switches the application's locale to Spanish and loads the appropriate translations.
+
+## Reloading All Translations
+Note: This function is called automatically when hot reload is performed and allows new translations to be loaded without restarting the app.
+
+``` Dart
+context.reloadTranslations();
+```
+This will refresh all translations in the current locale.
+
+## Reloading a Specific Translation
+
+``` Dart
+context.reloadTranslation('translationName');
+```
+This will refresh the specific translation identified by 'translationName'.
 
 ## Translating Strings
 Extend the String class to use translations easily in your UI code:
@@ -150,16 +165,10 @@ The `trPlural` function is used to translate text keys into their appropriate pl
 #### Usage:
 
 ```dart
-// Usage of trPlural in a Text widget for singular or plural forms based on the count.
-String singleOrPlural = trPlural(1);
-Text(singleOrPlural); // Displays 'item' if count is 1 or 'items' if more
 
-// Example in a full sentence where count influences the translation
-int itemCount = 3;
-Text(trPlural(itemCount) + ' remaining in your cart'); // Could translate to '3 items remaining in your cart'
+Text('money'.trPlural(3))
 
 ```
-
 
 ### `tr` Function
 The `tr` function is designed to translate text keys into localized strings based on the current locale settings. It supports basic translation, context-based translation, dynamic string formatting with named arguments, and pluralization. This function is ideal for integrating localization directly within UI components like `Text` widgets.
