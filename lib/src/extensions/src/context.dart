@@ -1,6 +1,7 @@
 import 'package:localization_pro/src/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:localization_pro/src/manager/localization_manager.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 /// Extends [BuildContext] to provide easy access to [LocalizationManager] methods.
 ///
@@ -78,4 +79,21 @@ extension LocalizationExt on BuildContext {
   void changeLocale(Locale newLocale) {
     locManager.changeLocale(this, newLocale);
   }
+
+  /// Retrieves the current locale from the [LocalizationProvider].
+  Locale get locale => LocalizationProvider.of(this).currentLocale;
+
+  /// Returns a list of localization delegates including:
+  /// - [GlobalMaterialLocalizations.delegate]
+  /// - [GlobalWidgetsLocalizations.delegate]
+  /// - [GlobalCupertinoLocalizations.delegate]
+  Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates => [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ];
+
+  /// Retrieves the list of supported locales by mapping them from the [LocalizationProvider].
+  Iterable<Locale> get supportedLocales =>
+      LocalizationProvider.of(this).supportedLocales.map((e) => e.locale);
 }

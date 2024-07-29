@@ -41,3 +41,4 @@
 * New Feature: Added trPlural method to the tr function for enhanced plural translations.
 * Bug Fixes: Addressed known issues for improved stability.
 * Performance Optimization: Enhanced overall performance and efficiency.
+* Added locale,localizationsDelegates,supportedLocales getters to the context
